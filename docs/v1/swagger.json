@@ -1,0 +1,22 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This server provides the Filesystem API needs.",
+        "title": "Filesystem API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "Dimas Bagus Susilo",
+            "url": "http://www.linkedin.com/in/dimasbagussusilo",
+            "email": "dimasbagussusilo@gmail.com"
+        },
+        "version": "1.0"
+    },
+    "paths": {},
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}

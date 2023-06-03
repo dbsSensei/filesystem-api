@@ -1,0 +1,16 @@
+info:
+  contact:
+    email: dimasbagussusilo@gmail.com
+    name: Dimas Bagus Susilo
+    url: http://www.linkedin.com/in/dimasbagussusilo
+  description: This server provides the Filesystem API needs.
+  termsOfService: http://swagger.io/terms/
+  title: Filesystem API
+  version: "1.0"
+paths: {}
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

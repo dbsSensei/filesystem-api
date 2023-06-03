@@ -4,9 +4,13 @@ import (
 	"fmt"
 	"github.com/dbsSensei/filesystem-api/config"
 	"github.com/dbsSensei/filesystem-api/controllers"
+	_ "github.com/dbsSensei/filesystem-api/docs/v1"
+	"github.com/dbsSensei/filesystem-api/routers"
 	"github.com/dbsSensei/filesystem-api/utils"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"gorm.io/gorm"
 )
 
@@ -27,8 +31,15 @@ func Init(c *config.Config, db *gorm.DB) error {
 	serverController := controllers.NewServerController(c, db)
 	server.GET("/health", serverController.HealthCheck)
 
+	// Setup swagger documentation
+	url := ginSwagger.URL("http://localhost:8080/swagger/doc.json")
+	server.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
+
 	// Setup Static File
 	server.Static("/public", "./public")
+
+	// Setup Routers
+	routers.V1(server, c, db)
 
 	// Run
 	err := server.Run(c.HTTPServerAddress)

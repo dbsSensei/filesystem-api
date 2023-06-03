@@ -1,0 +1,5 @@
+[2023/06/03 22:48:21] ::1 GET /swagger/index.html 200 904.958µs
+[2023/06/03 22:48:21] ::1 GET /swagger/swagger-ui-standalone-preset.js 200 395.709µs
+[2023/06/03 22:48:21] ::1 GET /swagger/swagger-ui.css 200 609.125µs
+[2023/06/03 22:48:21] ::1 GET /swagger/swagger-ui-bundle.js 200 4.59425ms
+[2023/06/03 22:48:21] ::1 GET /swagger/doc.json 200 255µs
