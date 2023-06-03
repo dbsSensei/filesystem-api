@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/dbsSensei/filesystem-api/config"
+	"github.com/dbsSensei/filesystem-api/forms"
 	"github.com/dbsSensei/filesystem-api/utils"
 	"gorm.io/gorm"
 	"net/http"
@@ -23,6 +24,15 @@ func NewServerController(config *config.Config, db *gorm.DB) *ServerController {
 	}
 }
 
+// HealthCheck godoc
+// @Summary Show the status of server.
+// @Description get the status of server.
+// @Tags Server
+// @Accept */*
+// @Produce json
+// @Success 200 {object} utils.Response{data=forms.HealthCheckResponse}
+// @Failure 500 {object} utils.Response{data=object}
+// @Router /health [get]
 func (s *ServerController) HealthCheck(c *gin.Context) {
 	// Server Check
 	dbConn, _ := s.db.DB()
@@ -52,11 +62,11 @@ func (s *ServerController) HealthCheck(c *gin.Context) {
 		databaseStatus = "ok"
 	}
 
-	c.JSON(http.StatusOK, utils.ResponseData("success", "Server running well", map[string]any{
-		"server_status":   "ok",
-		"database_status": databaseStatus,
-		"database_name":   dbName,
-		"database_host":   dbHost,
+	c.JSON(http.StatusOK, utils.ResponseData("success", "Server running well", forms.HealthCheckResponse{
+		ServerStatus:   "ok",
+		DatabaseStatus: databaseStatus,
+		DatabaseName:   dbName,
+		DatabaseHost:   dbHost,
 	},
 	))
 }

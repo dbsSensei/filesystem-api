@@ -6,11 +6,13 @@ import (
 )
 
 type Services struct {
-	UserService IRepository
+	UserService  IRepository
+	TokenService IRepository
 }
 
 func Init(db *gorm.DB) *Services {
 	return &Services{
-		UserService: NewRepository(&models.User{}, db),
+		UserService:  NewRepository(&models.User{}, db),
+		TokenService: NewRepository(&models.Token{}, db),
 	}
 }

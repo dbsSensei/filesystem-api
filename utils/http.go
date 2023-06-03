@@ -9,8 +9,6 @@ import (
 	"time"
 )
 
-// Response represents the response for a successful http operation.
-// swagger:response
 type Response struct {
 	Status  string `json:"status"`
 	Message string `json:"message"`
