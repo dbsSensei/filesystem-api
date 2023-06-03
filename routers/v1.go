@@ -2,6 +2,7 @@ package routers
 
 import (
 	"github.com/dbsSensei/filesystem-api/config"
+	"github.com/dbsSensei/filesystem-api/service"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -17,7 +18,7 @@ import (
 // @securityDefinitions.apikey ApiKeyAuth
 // @in header
 // @name Authorization
-func V1(router *gin.Engine, c *config.Config, db *gorm.DB) *gin.Engine {
-	
+func V1(router *gin.Engine, c *config.Config, db *gorm.DB, s *service.Services) *gin.Engine {
+
 	return router
 }

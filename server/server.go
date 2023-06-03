@@ -6,6 +6,7 @@ import (
 	"github.com/dbsSensei/filesystem-api/controllers"
 	_ "github.com/dbsSensei/filesystem-api/docs/v1"
 	"github.com/dbsSensei/filesystem-api/routers"
+	"github.com/dbsSensei/filesystem-api/service"
 	"github.com/dbsSensei/filesystem-api/utils"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -14,7 +15,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func Init(c *config.Config, db *gorm.DB) error {
+func Init(c *config.Config, db *gorm.DB, s *service.Services) error {
 	// Setup Router
 	server := gin.New()
 	server.Use(utils.Logger())
@@ -39,7 +40,7 @@ func Init(c *config.Config, db *gorm.DB) error {
 	server.Static("/public", "./public")
 
 	// Setup Routers
-	routers.V1(server, c, db)
+	routers.V1(server, c, db, s)
 
 	// Run
 	err := server.Run(c.HTTPServerAddress)

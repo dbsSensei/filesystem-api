@@ -6,13 +6,11 @@ import (
 )
 
 type Services struct {
-	UserService       IRepository
-	FilesystemService IRepository
+	UserService IRepository
 }
 
 func Init(db *gorm.DB) *Services {
 	return &Services{
-		UserService:       NewRepository(&models.User{}, db),
-		FilesystemService: NewRepository(&models.Filesystem{}, db),
+		UserService: NewRepository(&models.User{}, db),
 	}
 }

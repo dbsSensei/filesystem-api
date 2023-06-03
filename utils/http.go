@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/natefinch/lumberjack"
+	"math"
 	"os"
 	"time"
 )
@@ -22,6 +23,39 @@ func ResponseData(status string, message string, data any) *Response {
 		Message: message,
 		Data:    data,
 	}
+}
+
+type Pagination struct {
+	TotalItems int64
+	TotalPages int
+	PageSize   int
+	PageNum    int
+	HasPrev    bool
+	HasNext    bool
+}
+
+func Paginate(count int64, pageNum int, pageSize int) Pagination {
+	var pagination Pagination
+
+	pagination.TotalItems = count
+	pagination.PageSize = pageSize
+	pagination.PageNum = pageNum
+
+	if pageSize > 0 {
+		pagination.TotalPages = int(math.Ceil(float64(count) / float64(pageSize)))
+	} else {
+		pagination.TotalPages = 0
+	}
+
+	if pageNum > 1 {
+		pagination.HasPrev = true
+	}
+
+	if pageNum < pagination.TotalPages {
+		pagination.HasNext = true
+	}
+
+	return pagination
 }
 
 func Logger() gin.HandlerFunc {

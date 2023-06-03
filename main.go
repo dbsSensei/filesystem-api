@@ -4,6 +4,7 @@ import (
 	"github.com/dbsSensei/filesystem-api/config"
 	"github.com/dbsSensei/filesystem-api/database"
 	"github.com/dbsSensei/filesystem-api/server"
+	"github.com/dbsSensei/filesystem-api/service"
 )
 
 func main() {
@@ -19,8 +20,11 @@ func main() {
 		panic(err)
 	}
 
+	// Initialize service
+	s := service.Init(db)
+
 	//	Initialize server
-	err = server.Init(c, db)
+	err = server.Init(c, db, s)
 	if err != nil {
 		panic(err)
 	}
