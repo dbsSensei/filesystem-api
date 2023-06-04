@@ -37,11 +37,21 @@ func V1(router *gin.Engine, c *config.Config, db *gorm.DB, s *service.Services) 
 	usersEndpoint := "/users"
 	users := controllers.NewUserController(c, db, s)
 
+	// Filesystem
+	filesystemEndpoint := "/filesystem"
+	filesystem := controllers.NewFilesystemController(c, db, s)
+	v1.GET(filesystemEndpoint+"/download/:filename", filesystem.Download)
+
 	//////////////
 	// Authorized
 	tokenMaker, _ := utils.NewJWTMaker(c.TokenSymmetricKey)
 	authorizedV1 := router.Group("api/v1").Use(middlewares.AuthMiddleware(tokenMaker))
-	authorizedV1.GET(usersEndpoint+"/whoami", users.WhoAmI)
 
+	// User
+	authorizedV1.GET(usersEndpoint+"/me", users.Me)
+
+	// Filesystem
+	authorizedV1.POST(filesystemEndpoint+"/upload", filesystem.Upload)
+	authorizedV1.GET(filesystemEndpoint+"/my-files", users.MyFiles)
 	return router
 }

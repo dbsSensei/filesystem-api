@@ -60,6 +60,19 @@ definitions:
       status:
         type: string
     type: object
+  models.Filesystem:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+      user_id:
+        type: integer
+    type: object
   utils.Response:
     properties:
       data: {}
@@ -168,7 +181,113 @@ paths:
       summary: Signup user.
       tags:
       - Auth
-  /api/v1/users/whoami:
+  /api/v1/filesystem/download/{filename}:
+    get:
+      consumes:
+      - '*/*'
+      description: Downloads a tar.gz file for processing
+      parameters:
+      - description: file you want to download
+        in: path
+        name: filename
+        required: true
+        type: string
+      produces:
+      - application/file
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+      summary: Download a compressed file
+      tags:
+      - Files
+  /api/v1/filesystem/my-files:
+    get:
+      consumes:
+      - '*/*'
+      description: get all logged-in user files.
+      parameters:
+      - description: files page
+        in: query
+        name: page
+        type: integer
+      - description: limit per files
+        in: query
+        name: limit
+        type: integer
+      - description: order files by
+        in: query
+        name: order_by
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Filesystem'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Show logged-in user files.
+      tags:
+      - Files
+  /api/v1/filesystem/upload:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Uploads a tar.gz file for processing
+      parameters:
+      - description: The tar.gz file to upload
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Upload a compressed file
+      tags:
+      - Files
+  /api/v1/users/me:
     get:
       consumes:
       - '*/*'

@@ -25,7 +25,7 @@ func NewUserController(config *config.Config, db *gorm.DB, s *service.Services) 
 	}
 }
 
-// WhoAmI godoc
+// Me godoc
 // @Summary Show logged-in user.
 // @Description get logged-in user data.
 // @Tags Users
@@ -34,8 +34,8 @@ func NewUserController(config *config.Config, db *gorm.DB, s *service.Services) 
 // @Success 200 {object} utils.Response{data=forms.WhoAmIResponse}
 // @Failure 500 {object} utils.Response{data=object}
 // @Security ApiKeyAuth
-// @Router /api/v1/users/whoami [get]
-func (ac *UserController) WhoAmI(ctx *gin.Context) {
+// @Router /api/v1/users/me [get]
+func (ac *UserController) Me(ctx *gin.Context) {
 	authPayload := ctx.MustGet("authorization_payload").(*utils.TokenPayload)
 	result, err := ac.s.UserService.FindOne(authPayload.UserId, nil)
 	if err != nil {

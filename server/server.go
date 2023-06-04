@@ -13,6 +13,7 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"gorm.io/gorm"
+	"net/http"
 )
 
 func Init(c *config.Config, db *gorm.DB, s *service.Services) error {
@@ -35,6 +36,9 @@ func Init(c *config.Config, db *gorm.DB, s *service.Services) error {
 	// Setup swagger documentation
 	url := ginSwagger.URL("http://localhost:8080/swagger/doc.json")
 	server.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
+	server.GET("/", func(ctx *gin.Context) {
+		ctx.Redirect(http.StatusPermanentRedirect, "/swagger/index.html")
+	})
 
 	// Setup Static File
 	server.Static("/public", "./public")

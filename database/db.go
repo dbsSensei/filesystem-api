@@ -3,6 +3,7 @@ package database
 import (
 	"fmt"
 	"github.com/dbsSensei/filesystem-api/config"
+	"github.com/dbsSensei/filesystem-api/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -43,5 +44,9 @@ func migrationInit(db *gorm.DB) error {
 }
 
 func getModels() []any {
-	return []any{}
+	return []any{
+		&models.User{},
+		&models.Token{},
+		&models.Filesystem{},
+	}
 }
