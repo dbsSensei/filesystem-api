@@ -16,13 +16,13 @@ var (
 // TokenPayload contains the payload data of the tokens
 type TokenPayload struct {
 	Id        uuid.UUID `json:"id"`
-	UserId    int32     `json:"user_id"`
+	UserId    int       `json:"user_id"`
 	IssuedAt  time.Time `json:"issued_at"`
 	ExpiredAt time.Time `json:"expired_at"`
 }
 
 // NewPayload creates a new tokens payload with a specific username and duration
-func NewPayload(userId int32, duration time.Duration) (*TokenPayload, error) {
+func NewPayload(userId int, duration time.Duration) (*TokenPayload, error) {
 	tokenId, err := uuid.NewRandom()
 	if err != nil {
 		return nil, err
@@ -48,7 +48,7 @@ func (payload *TokenPayload) Valid() error {
 // TokenMaker is an interface for managing tokens
 type TokenMaker interface {
 	// CreateToken creates a new tokens for a specific username and duration
-	CreateToken(userId int32, duration time.Duration) (string, *TokenPayload, error)
+	CreateToken(userId int, duration time.Duration) (string, *TokenPayload, error)
 
 	// VerifyToken checks if the tokens is valid or not
 	VerifyToken(token string) (*TokenPayload, error)

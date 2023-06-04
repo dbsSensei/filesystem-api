@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"github.com/dbsSensei/filesystem-api/config"
 	"github.com/dbsSensei/filesystem-api/forms"
 	"github.com/dbsSensei/filesystem-api/models"
@@ -34,21 +33,18 @@ func NewUserController(config *config.Config, db *gorm.DB, s *service.Services) 
 // @Produce json
 // @Success 200 {object} utils.Response{data=forms.WhoAmIResponse}
 // @Failure 500 {object} utils.Response{data=object}
+// @Security ApiKeyAuth
 // @Router /api/v1/users/whoami [get]
 func (ac *UserController) WhoAmI(ctx *gin.Context) {
-	authPayload, _ := ctx.Get("authorization_payload")
-
-	fmt.Printf("auth payload %+v\n", authPayload)
-	result, err := ac.s.UserService.FindOne(1, nil)
+	authPayload := ctx.MustGet("authorization_payload").(*utils.TokenPayload)
+	result, err := ac.s.UserService.FindOne(authPayload.UserId, nil)
 	if err != nil {
-		ctx.JSON(http.StatusCreated, utils.ResponseData("error", "failed get current user", nil))
+		ctx.JSON(http.StatusInternalServerError, utils.ResponseData("error", err.Error(), nil))
 		return
 	}
+	user := result.(*models.User)
 
-	var user models.User
-	user = result.(models.User)
-
-	ctx.JSON(http.StatusCreated, utils.ResponseData("success", "success get current user", forms.WhoAmIResponse{
+	ctx.JSON(http.StatusOK, utils.ResponseData("success", "success get current user", forms.WhoAmIResponse{
 		ID:     user.ID,
 		Name:   user.Name,
 		Email:  user.Email,

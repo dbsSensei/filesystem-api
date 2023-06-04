@@ -187,6 +187,11 @@ const docTemplate = `{
         },
         "/api/v1/users/whoami": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "get logged-in user data.",
                 "consumes": [
                     "*/*"

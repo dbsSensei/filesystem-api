@@ -141,12 +141,12 @@ func (ac *AuthController) Signin(c *gin.Context) {
 	}
 
 	accessToken, accessPayload, _ := tokenMaker.CreateToken(
-		int32(user.ID),
+		user.ID,
 		cfg.AccessTokenDuration,
 	)
 
 	refreshToken, refreshPayload, err := tokenMaker.CreateToken(
-		int32(user.ID),
+		user.ID,
 		cfg.RefreshTokenDuration,
 	)
 

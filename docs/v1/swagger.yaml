@@ -194,6 +194,8 @@ paths:
                 data:
                   type: object
               type: object
+      security:
+      - ApiKeyAuth: []
       summary: Show logged-in user.
       tags:
       - Users
