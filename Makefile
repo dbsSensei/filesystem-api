@@ -14,7 +14,7 @@ build:
 
 .PHONY: run
 ## run: Build and Run in development mode.
-run: build
+run:
 	@./$(NAME)
 
 .PHONY: clean
