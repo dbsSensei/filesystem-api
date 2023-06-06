@@ -2,7 +2,6 @@ package service
 
 import (
 	"fmt"
-	"github.com/dbsSensei/filesystem-api/utils"
 	"gorm.io/gorm"
 )
 
@@ -17,7 +16,7 @@ type Repository struct {
 
 type IRepository interface {
 	FindOne(id int, dbTransaction *gorm.DB) (any, error)
-	FindAll(pageNum int, pageSize int, applyFilterAndSort func(db *gorm.DB) *gorm.DB, dbTransaction *gorm.DB) ([]map[string]any, utils.Pagination, error)
+	FindAll(applyFilterAndSort func(db *gorm.DB) *gorm.DB, dbTransaction *gorm.DB) ([]map[string]any, error)
 	Create(form any, dbTransaction *gorm.DB) (any, error)
 	Update(id int, form any, dbTransaction *gorm.DB) (any, error)
 	Delete(id int, dbTransaction *gorm.DB) error
@@ -49,29 +48,25 @@ func (r *Repository) FindOne(id int, dbTransaction *gorm.DB) (any, error) {
 	return entity, nil
 }
 
-func (r *Repository) FindAll(pageNum int, pageSize int, applyFilterAndSort func(db *gorm.DB) *gorm.DB, dbTransaction *gorm.DB) ([]map[string]any, utils.Pagination, error) {
+func (r *Repository) FindAll(applyFilterAndSort func(db *gorm.DB) *gorm.DB, dbTransaction *gorm.DB) ([]map[string]any, error) {
 	db := r.getDB(dbTransaction)
 
 	var count int64
 	err := db.Model(r.entity).Count(&count).Error
 	if err != nil {
-		return nil, utils.Pagination{}, err
+		return nil, err
 	}
 
 	var entities []map[string]any
 	query := db.Table(r.entity.TableName())
 	query = applyFilterAndSort(query)
-	query = query.Limit(pageSize).Offset((pageNum - 1) * pageSize)
 	res := query.Find(&entities)
 	if res.Error != nil {
 		fmt.Printf("error, %+v\n", res.Error)
-		return nil, utils.Pagination{}, err
+		return nil, err
 	}
 
-	fmt.Printf("res %+v\n", res)
-
-	pagination := utils.Paginate(count, pageNum, pageSize)
-	return entities, pagination, nil
+	return entities, nil
 }
 
 func (r *Repository) Create(form any, dbTransaction *gorm.DB) (any, error) {

@@ -104,11 +104,14 @@ func (ac *AuthController) Signin(c *gin.Context) {
 	}
 
 	findUserWithEmailQuery := func(query *gorm.DB) *gorm.DB {
+		pageNum := 1
+		pageSize := 1
 		query.Where("LOWER(email) = ?", strings.ToLower(input.Email))
+		query = query.Limit(pageSize).Offset((pageNum - 1) * pageSize)
 		return query
 	}
 
-	results, _, err := ac.s.UserService.FindAll(1, 1, findUserWithEmailQuery, nil)
+	results, err := ac.s.UserService.FindAll(findUserWithEmailQuery, nil)
 	if err != nil {
 		return
 	}
